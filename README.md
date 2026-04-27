@@ -1,27 +1,47 @@
-# Pratech İzin Yönetim Sistemi 🚀
+# Pratech İzin Yönetim Sistemi 
 
-Bu proje, **Pratech** staj başvuru süreci kapsamında geliştirilmiş, 3 farklı kullanıcı deneyimi sunan (Giriş, Personel, Yönetici) bir **Fullstack İzin Yönetim Sistemi** prototipidir.
+Bu proje, **Pratech** staj başvuru süreci kapsamında geliştirilmiş; Personel ve Yönetici rollerini ayıran, veri kalıcılığına ve kullanıcı deneyimine (UX) odaklanan **Fullstack** bir izin yönetim uygulamasıdır.
 
-## 📋 Proje Özellikleri
+## Proje Özellikleri
 
-- **Personel Paneli:** İzin türü seçimi, açıklama alanı ve tarih kısıtlamalarıyla (geçmiş tarih engeli) talep oluşturma.
-- **Yönetici Paneli:** Şifreli giriş, bekleyen talepleri görüntüleme, onaylama veya reddetme fonksiyonları.
-- **Veri Kalıcılığı:** Veriler RAM üzerinde değil, `veritabani.json` dosyası üzerinde kalıcı olarak saklanır.
-- **Modern Arayüz:** Tailwind CSS ile tasarlanmış, duyarlı (responsive) ve kullanıcı dostu arayüz.
-- **Güvenlik:** API seviyesinde admin anahtarı (Secret Key) kontrolü ve `localStorage` tabanlı oturum yönetimi.
+- **Çift Panelli Yapı:** Personel için talep oluşturma, Yönetici için onay/red mekanizması.
+- **Veri Kalıcılığı (Persistence):** Veriler `veritabani.json` dosyası üzerinde saklanır; sunucu kapansa dahi veriler kaybolmaz.
+- **Akıllı Oturum Yönetimi:** `localStorage` kullanımı sayesinde sayfa yenilense bile kullanıcı bulunduğu panelden atılmaz.
+- **İş Kuralları (Business Logic):** - Geçmiş tarihlere izin girişi engellenmiştir.
+  - Başlangıç ve bitiş tarihlerinin aynı olması engellenmiştir.
+  - İzin gün sayısı tarih seçimine göre anlık hesaplanır.
+- **Modern UI:** Tailwind CSS ile tasarlanmış, temiz ve kurumsal arayüz.
 
-## 🛠️ Kullanılan Teknolojiler
+## Teknik Yığın (Tech Stack)
 
-- **Backend:** Python, FastAPI, Pydantic
-- **Frontend:** HTML5, JavaScript (ES6+), Tailwind CSS
-- **Veri Saklama:** JSON (File System)
+- **Backend:** Python, FastAPI
+- **Frontend:** HTML5, JavaScript (Vanilla JS), Tailwind CSS
+- **Veri Yapısı:** JSON
 - **Sunucu:** Uvicorn
 
-## 🚀 Kurulum ve Çalıştırma
+## Kurulum ve Çalıştırma
 
-Projeyi yerel bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyebilirsiniz:
+Projeyi yerel ortamınızda ayağa kaldırmak için şu adımları izleyebilirsiniz:
 
-1. **Depoyu klonlayın:**
+1. **Gerekli Kütüphaneleri Yükleyin:**
    ```bash
-   git clone [https://github.com/kullanici-adiniz/pratech-izin-sistemi.git](https://github.com/kullanici-adiniz/pratech-izin-sistemi.git)
-   cd pratech-izin-sistemi
+   pip install -r requirements.txt
+
+2. **Backend Sunucusunu Başlatın:**
+    ```bash
+   uvicorn main:app --reload
+3. **Uygulamayı Açın:**
+   index.html dosyasını tarayıcınızda açarak kullanmaya başlayabilirsiniz.
+
+**Kullanım Bilgileri**
+  - Yönetici Giriş Parolası: admin123
+  - Backend Adresi: http://127.0.0.1:8000
+
+
+**Proje Yapısı**
+  - main.py: FastAPI API Endpointleri ve İş Mantığı
+  - index.html: Uygulamanın HTML İskeleti
+  - style.css: Tailwind Custom Sınıfları ve Tasarım
+  - script.js: API Haberleşmesi ve DOM Yönetimi
+  - requirements.txt: Bağımlılık Listesi
+  - veritabani.json: Kalıcı Veri Saklama Dosyası
