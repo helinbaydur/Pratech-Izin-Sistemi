@@ -1,10 +1,20 @@
 const API = "http://127.0.0.1:8000";
 
-// SAYFA YÜKLENDİĞİNDE OTURUMU KONTROL ET
+// SAYFA YÜKLENDİĞİNDE OTURUMU VE TAKVİM KISITLARINI KONTROL ET
 window.onload = () => {
     const savedScreen = localStorage.getItem('currentScreen');
     if (savedScreen) {
         switchScreen(savedScreen, true);
+    }
+
+    // Geçmiş tarihleri engellemek için takvimlerin minimum değerini BUGÜN yap
+    const today = new Date().toISOString().split('T')[0];
+    const bInput = document.getElementById('baslangic');
+    const sInput = document.getElementById('bitis');
+    
+    if(bInput && sInput) {
+        bInput.setAttribute('min', today);
+        sInput.setAttribute('min', today);
     }
 };
 
@@ -40,19 +50,43 @@ function logout() {
     location.reload();
 }
 
-// GÜN SAYISI HESAPLAMA
+// GÜN SAYISI HESAPLAMA VE TARİH KONTROLÜ
 function calc() {
-    const b = document.getElementById('baslangic').value;
-    const s = document.getElementById('bitis').value;
-    if(b && s) { 
-        const g = (new Date(s) - new Date(b)) / 86400000;
-        document.getElementById('gun').innerText = g > 0 ? g + " GÜN" : "HATA";
+    const bInput = document.getElementById('baslangic');
+    const sInput = document.getElementById('bitis');
+    const gunGosterge = document.getElementById('gun');
+    
+    if(!bInput.value || !sInput.value) return;
+
+    const b = new Date(bInput.value);
+    const s = new Date(sInput.value);
+
+    // 1. Kural: Bitiş başlangıçtan önce veya aynı gün olamaz
+    if (s <= b) {
+        alert("Bitiş tarihi, başlangıç tarihinden sonraki bir gün olmalıdır!");
+        sInput.value = ""; // Hatalı tarihi temizle
+        gunGosterge.innerText = "HATA";
+        return;
     }
+
+    // 2. Kural: Geçmiş tarih kontrolü (JS tarafında ekstra güvenlik)
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    if (b < today) {
+        alert("Geçmiş bir tarihe izin alamazsınız!");
+        bInput.value = "";
+        gunGosterge.innerText = "HATA";
+        return;
+    }
+
+    const fark = (s - b) / 86400000;
+    gunGosterge.innerText = fark + " GÜN";
 }
 
 // FORM GÖNDERME (İZİN TALEBİ)
 document.getElementById('izinForm').onsubmit = async (e) => {
     e.preventDefault();
+    
     const res = await fetch(`${API}/izin-talep`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -69,6 +103,9 @@ document.getElementById('izinForm').onsubmit = async (e) => {
         alert("Başarılı!"); 
         e.target.reset(); 
         document.getElementById('gun').innerText = "0 GÜN"; 
+    } else {
+        const errData = await res.json();
+        alert("Hata: " + errData.detail);
     }
 };
 
