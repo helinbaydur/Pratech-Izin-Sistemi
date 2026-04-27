@@ -1,0 +1,42 @@
+[
+    {
+        "ad_soyad": "Ayşe Kaya",
+        "izin_turu": "Sağlık İzni",
+        "baslangic_tarihi": "2026-04-27",
+        "bitis_tarihi": "2026-04-29",
+        "aciklama": "Soğuk algınlığı",
+        "id": "fc19a724-d380-41fa-b393-10d83b3fe5ce",
+        "durum": "Reddedildi",
+        "gun_sayisi": 2
+    },
+    {
+        "ad_soyad": "jujuuuu",
+        "izin_turu": "Yıllık İzin",
+        "baslangic_tarihi": "2026-05-04",
+        "bitis_tarihi": "2026-05-07",
+        "aciklama": "fdncvmken",
+        "id": "1c704214-87f2-4365-9eab-02c71f6cc131",
+        "durum": "Onaylandı",
+        "gun_sayisi": 3
+    },
+    {
+        "ad_soyad": "jujuuuu",
+        "izin_turu": "Yıllık İzin",
+        "baslangic_tarihi": "2026-04-28",
+        "bitis_tarihi": "2026-05-06",
+        "aciklama": "dfsfdsfs",
+        "id": "9b456bd3-133c-43b0-9882-d0230c5e6d69",
+        "durum": "Onaylandı",
+        "gun_sayisi": 8
+    },
+    {
+        "ad_soyad": "rfregerregeg",
+        "izin_turu": "Sağlık İzni",
+        "baslangic_tarihi": "2026-05-03",
+        "bitis_tarihi": "2026-05-10",
+        "aciklama": "gfbf",
+        "id": "fc6949d5-80f3-4a58-a6f5-1193ee655244",
+        "durum": "Onaylandı",
+        "gun_sayisi": 7
+    }
+]

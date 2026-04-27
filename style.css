@@ -1,0 +1,15 @@
+body { 
+    font-family: 'Inter', sans-serif; 
+}
+
+/* Chrome, Safari, Edge ve Opera için tarih seçici ikonunu özelleştirme */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 2px;
+    opacity: 0.6;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
