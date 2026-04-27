@@ -41,28 +41,44 @@ ADMIN_KEY = "pratech_admin_2026"
 
 @app.post("/izin-talep")
 async def izin_talep_et(talep: IzinTalebi):
+    bugun = date.today()
+    
+    # 1. Kontrol: Geçmiş tarih engeli
+    if talep.baslangic_tarihi < bugun:
+        raise HTTPException(status_code=400, detail="Geçmiş tarihler için izin talebi oluşturulamaz.")
+    
+    # 2. Kontrol: Bitiş tarihi başlangıçtan önce veya aynı gün olamaz
+    if talep.bitis_tarihi <= talep.baslangic_tarihi:
+        raise HTTPException(status_code=400, detail="Bitiş tarihi başlangıç tarihinden sonraki bir tarih olmalıdır.")
+
     veriler = verileri_oku()
     yeni = talep.dict()
     yeni["id"] = str(uuid.uuid4())
     yeni["durum"] = "Beklemede"
-    yeni["gun_sayisi"] = (talep.bitis_tarihi - talep.baslangic_tarihi).days
+    
+    # Gün sayısını hesapla
+    fark = (talep.bitis_tarihi - talep.baslangic_tarihi).days
+    yeni["gun_sayisi"] = fark
+    
+    # JSON serileştirme için tarihleri string'e çevir
     yeni["baslangic_tarihi"] = str(yeni["baslangic_tarihi"])
     yeni["bitis_tarihi"] = str(yeni["bitis_tarihi"])
+    
     veriler.append(yeni)
     verileri_yaz(veriler)
     return {"status": "success"}
 
-@app.get("/izinler") # Burası 'izinler' olarak sabitlendi
+@app.get("/izinler")
 async def izinleri_listele():
     return verileri_oku()
 
 @app.put("/izin-durum/{id}")
 async def durum_guncelle(id: str, yeni_durum: str, key: str):
-    if key != ADMIN_KEY: raise HTTPException(status_code=403)
+    if key != ADMIN_KEY: raise HTTPException(status_code=403, detail="Yetkisiz erişim anahtarı!")
     veriler = verileri_oku()
     for k in veriler:
         if k["id"] == id:
             k["durum"] = yeni_durum
             verileri_yaz(veriler)
             return {"status": "updated"}
-    raise HTTPException(status_code=404)
+    raise HTTPException(status_code=404, detail="Talep bulunamadı.")
